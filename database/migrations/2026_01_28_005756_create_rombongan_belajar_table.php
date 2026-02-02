@@ -12,19 +12,15 @@ return new class extends Migration
     public function up(): void
 {
     Schema::create('rombongan_belajar', function (Blueprint $table) {
-        $table->id();
-        
-        // Relasi ke Tahun Ajaran (Buku Periode)
-        $table->foreignId('tahun_ajar_id')->constrained('tahun_ajar')->onDelete('cascade');
-        
-        // Relasi ke Guru (Wali Kelas) dari tabel Users
-        $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
-        
-        // Detail Rombel
-        $table->string('nama_rombel'); // Contoh: XII RPL 1
-        $table->integer('tingkat');    // Contoh: 10, 11, atau 12
-        
-        $table->timestamps();
-    });
+    $table->id();
+    $table->string('nama_rombel');
+    $table->foreignId('teacher_id')->constrained('users'); // Wali Kelas
+    $table->foreignId('sekertaris_id')->nullable()->constrained('users'); // Sekretaris terpilih
+    // Titik pusat sekolah (Radius 50m)
+    $table->decimal('latitude_sekolah', 10, 8); 
+    $table->decimal('longitude_sekolah', 11, 8);
+    $table->integer('radius_meter')->default(50); 
+    $table->timestamps();
+});
 }
 };

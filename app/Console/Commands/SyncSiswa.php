@@ -20,16 +20,18 @@ class SyncSiswa extends Command
         if ($response->successful()) {
             $students = $response->json();
 
+            // Di SyncSiswa.php bagian handle()
             foreach ($students as $data) {
-                PesertaDidik::updateOrCreate(
-                    ['nis' => $data['nisn'] ?? $data['nis'] ?? '000'], 
-                    [
-                        'user_id' => null, 
-                        'jenis_kelamin' => ($data['jk'] ?? 'L') == 'Laki-laki' ? 'L' : 'P',
-                        'alamat' => $data['alamat'] ?? '-',
-                    ]
-                );
-            }
+            // Kita gunakan ID asli dari API sebagai kunci unik agar tidak tertukar
+            PesertaDidik::updateOrCreate(
+            ['nis' => $data['nomor_induk'] ?? $data['username'] ?? $data['nisn'] ?? rand(1, 999999)], 
+        [
+            'user_id' => null,
+            'jenis_kelamin' => ($data['jk'] ?? 'L') == 'Laki-laki' ? 'L' : 'P',
+            'alamat' => $data['alamat'] ?? '-',
+        ]
+    );
+}
             $this->info('MANTAP! Data sudah masuk semua.');
         } else {
             $this->error('Gagal konek ke API.');
