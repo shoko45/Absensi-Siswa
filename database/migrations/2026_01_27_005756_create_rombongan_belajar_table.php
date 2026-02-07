@@ -14,6 +14,7 @@ return new class extends Migration
     Schema::create('rombongan_belajar', function (Blueprint $table) {
     $table->id();
     $table->string('nama_rombel');
+    $table->foreignId('tahun_ajar_id')->constrained('tahun_ajar');
     $table->foreignId('teacher_id')->constrained('users'); // Wali Kelas
     $table->foreignId('sekertaris_id')->nullable()->constrained('users'); // Sekretaris terpilih
     // Titik pusat sekolah (Radius 50m)

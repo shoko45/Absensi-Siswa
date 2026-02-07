@@ -19,12 +19,24 @@ class User extends Authenticatable
      */
     // app/Models/User.php
 
-    protected $fillable = [
-    'name',
-    'username', // Ganti email jadi username
-    'password',
-    'role',
-    ];
+    protected $fillable = ['name', 'username', 'password', 'role'];
+
+public function pesertaDidik()
+{
+    return $this->hasOne(PesertaDidik::class, 'user_id');
+}
+
+// Untuk cek kelas yang dia pimpin (khusus Wali Kelas)
+public function kelasDipimpin()
+{
+    return $this->hasOne(RombonganBelajar::class, 'teacher_id');
+}
+
+// Untuk cek absen-absen yang pernah dia lakukan
+public function absensi()
+{
+    return $this->hasMany(Absensi::class, 'user_id');
+}
 
     /**
      * The attributes that should be hidden for serialization.
